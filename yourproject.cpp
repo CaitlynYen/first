@@ -2,13 +2,14 @@
 #include<cstring>
 #include<string>
 #include<fstream> 
+#include<vector>
 using namespace std;
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-	int row; 
+	int row;
 	int column;
-	int a[10000] = { 0 };
-	int result = 0;
+	vector<int>r;
+	vector<int>c;
 	ifstream filein;
 	ofstream fileout;
 	string name = "./";
@@ -17,20 +18,18 @@ int main(int argc, char *argv[])
 	string fin = "/final.peak";
 	string in = name + id + matrix;
 	string out = name + id + fin;
-	filein.open(in.c_str);
+	filein.open(in.c_str());
 	if (filein)
 	{
 		filein >> row >> column;
-		int array[row][column];
+		int mat[row][column];
 		while (!filein.eof())
 		{
-			for (int i = 1; i < row - 1; i++)
+			for (int i = 0; i < row; i++)
 			{
-				for (int j = 1; j < column - 1; j++)
+				for (int j = 0; j < column; j++)
 				{
-					int put;
-					filein >> put;
-					array[i][j] = put;
+					filein >> mat[i][j];
 				}
 			}
 		}
@@ -39,35 +38,27 @@ int main(int argc, char *argv[])
 		fileout.open(out.c_str());
 		int count = 0;
 		for (int i = 1; i < row - 1; i++)
-		{
-			for (int j = 1; j < column - 1; j++)
-			{
-				if (array[i][j] >= array[i - 1][j])
-					if (array[i][j] >= array[i + 1][j])
-						if (array[i][j] >= array[i][j - 1])
-							if (array[i][j] >= array[i][j + 1])
+			for (int j = 1; j< column - 1; j++)
+				if (mat[i][j] >= mat[i - 1][j])
+					if (mat[i][j] >= mat[i + 1][j])
+						if (mat[i][j] >= mat[i][j - 1])
+							if (mat[i][j] >= mat[i][j + 1])
 							{
 								count++;
-								a[result++] = i + 1;
-								a[result++] = j + 1;
+								r.push_back(i + 1);
+								c.push_back(j + 1);
 							}
-			}
-			if (count)
-			{
-				fileout << count << endl;
-			}
-			else fileout << 0 << endl;
-			for (int i = 1; i < result - 1; i++)
-			{
-				fileout << a[i] << " ";
-				cout << a[i] << " ";
-				if (i % 2 == 1)
-				{
-					fileout << endl;
-					cout << endl;
-				}
-			}
-			fileout.close();
+		fileout << count << endl;
+		for (int i = 0; i < r.size(); i++) 
+		{
+				fileout << r[i] << " ";
+				cout << r[i] << " ";
+				fileout << c[i] << " ";
+				cout << c[i] << " ";
+				fileout << endl;
+				cout << endl;
 		}
-		return 0;
+		fileout.close();
 	}
+	return 0;
+}
